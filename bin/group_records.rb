@@ -19,6 +19,10 @@ OptionParser.new do |opts|
     options[:matcher] = matcher
   end
 
+  opts.on("-o", "--output FILE", "Path to output file") do |file|
+    options[:output] = file
+  end
+
 end.parse!
 
 unless options[:input] && options[:matcher]
@@ -26,7 +30,6 @@ unless options[:input] && options[:matcher]
   exit 1
 end
 
-# Check input file exists
 unless File.exist?(options[:input])
   abort("File not found: #{options[:input]}")
 end
@@ -43,4 +46,16 @@ records = CsvLoader.load_records(options[:input])
 matcher = matcher_class.new(records)
 groups = matcher.build_groups # a map showing the group for each record index
 
+input_file_name = File.basename(options[:input], ".csv")
+output_file_name = options[:output] || "grouped_#{input_file_name}.csv"
 
+CSV.open(output_file_name, "w") do |csv|
+  csv << ["Group ID"] + records.first.headers
+  records.each_with_index
+         .sort_by { |_, index| groups[index] }
+         .each do |record, index|
+    csv << [groups[index], record.to_a]
+  end
+end
+
+puts "Wrote grouped results to #{output_file_name}"
