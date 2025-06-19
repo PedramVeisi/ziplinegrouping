@@ -4,6 +4,7 @@ require 'optparse'
 require_relative '../lib/csv_loader'
 require_relative '../lib/matcher/phone_matcher'
 require_relative '../lib/matcher/email_matcher'
+require_relative '../lib/matcher/email_or_phone_matcher'
 
 options = {}
 
@@ -28,6 +29,7 @@ end
 matcher_class = case options[:matcher].downcase.strip
                 when 'phone' then PhoneMatcher
                 when 'email' then EmailMatcher
+                when /(email_or_phone|phone_or_email)/ then EmailOrPhoneMatcher
                 else
                   abort "Unknown matcher: #{options[:matcher]}\nValid options: email, phone, email_or_phone, phone_or_email"
                 end

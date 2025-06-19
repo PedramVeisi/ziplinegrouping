@@ -20,8 +20,6 @@ RSpec.describe EmailMatcher do
     matcher = EmailMatcher.new(records)
     groups = matcher.build_groups
 
-    puts(groups)
-
     expect(groups[0]).to eq(groups[1])
     expect(groups[2]).not_to eq(groups[0])
     expect(groups[3]).not_to eq(groups[0])
