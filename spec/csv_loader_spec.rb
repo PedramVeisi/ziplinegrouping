@@ -14,7 +14,7 @@ RSpec.describe CsvLoader do
       File.delete(temp_path)
     end
 
-    it 'loads all records with indexes' do
+    it 'loads all records with indicies' do
       records = CsvLoader.load_records(temp_path)
 
       expect(records.size).to eq(2)
