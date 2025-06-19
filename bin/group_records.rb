@@ -26,6 +26,11 @@ unless options[:input] && options[:matcher]
   exit 1
 end
 
+# Check input file exists
+unless File.exist?(options[:input])
+  abort("File not found: #{options[:input]}")
+end
+
 matcher_class = case options[:matcher].downcase.strip
                 when 'phone' then PhoneMatcher
                 when 'email' then EmailMatcher
@@ -38,5 +43,4 @@ records = CsvLoader.load_records(options[:input])
 matcher = matcher_class.new(records)
 groups = matcher.build_groups # a map showing the group for each record index
 
-records.each { |record| puts record.inspect }
-puts groups
+
