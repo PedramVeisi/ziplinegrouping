@@ -50,11 +50,11 @@ input_file_name = File.basename(options[:input], ".csv")
 output_file_name = options[:output] || "grouped_#{input_file_name}.csv"
 
 CSV.open(output_file_name, "w") do |csv|
-  csv << ["Group ID"] + records.first.headers
+  csv << ["User ID"] + records.first.headers
   records.each_with_index
          .sort_by { |_, index| groups[index] }
          .each do |record, index|
-    csv << [groups[index], record.to_a]
+    csv << [groups[index]] + record.to_a
   end
 end
 
