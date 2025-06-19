@@ -49,12 +49,14 @@ groups = matcher.build_groups # a map showing the group for each record index
 input_file_name = File.basename(options[:input], ".csv")
 output_file_name = options[:output] || "grouped_#{input_file_name}.csv"
 
+grouped_results = records.each_with_index.group_by { |_, index| groups[index] }
+
 CSV.open(output_file_name, "w") do |csv|
   csv << ["User ID"] + records.first.headers
-  records.each_with_index
-         .sort_by { |_, index| groups[index] }
-         .each do |record, index|
-    csv << [groups[index]] + record.to_a
+  grouped_results.each do |group_id, record_indices|
+    record_indices.each do |record, _|
+      csv << [group_id] + record.to_a
+    end
   end
 end
 

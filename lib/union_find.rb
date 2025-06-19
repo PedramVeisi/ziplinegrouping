@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class UnionFind
   def initialize(size)
     @parents = Array.new(size) { |index| index } # Each element is its own group in the beginning
